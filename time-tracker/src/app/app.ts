@@ -4,7 +4,8 @@ import { DashboardComponent } from './dashboard-component/dashboard-component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DashboardComponent],
+  imports: [RouterOutlet],
+  standalone: true,
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

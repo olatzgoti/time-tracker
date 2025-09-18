@@ -1,25 +1,25 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { AuthSession } from '@supabase/supabase-js'
-import { Profile, SupabaseService } from '../supabase.service'
+import { SupabaseService } from '../supabase.service'
 
 @Component({
-  selector: 'app-account',
-  templateUrl: './account.html',
-  styleUrls: ['./account.css'],
+  selector: 'app-profile',
+  templateUrl: './profile-component.html',
+  styleUrls: ['./profile-component.css'],
   standalone: false,
 })
-export class AccountComponent implements OnInit {
+export class ProfileComponent implements OnInit {
   loading = false
-  profile!: Profile
+ // profile!: Profile
   updateProfileForm!: FormGroup
 
-  get avatarUrl() {
-    return this.updateProfileForm.value.avatar_url as string
+  get picture() {
+    return this.updateProfileForm.value.picture as string
   }
   async updateAvatar(event: string): Promise<void> {
     this.updateProfileForm.patchValue({
-      avatar_url: event,
+      picture: event,
     })
     await this.updateProfile()
   }
@@ -32,22 +32,21 @@ export class AccountComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.updateProfileForm = this.formBuilder.group({
+      email: '',
       username: '',
-      website: '',
-      avatar_url: '',
+      picture: '',
     })
-  }
+  } 
 
   async ngOnInit(): Promise<void> {
     await this.getProfile()
-
+/*
     const { username, picture } = this.profile
     this.updateProfileForm.patchValue({
       username,
       picture,
-      
     })
-  }
+  */}
 
   async getProfile() {
     try {
@@ -60,7 +59,7 @@ export class AccountComponent implements OnInit {
       }
 
       if (profile) {
-        this.profile = profile
+     //   this.profile = profile
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -77,15 +76,12 @@ export class AccountComponent implements OnInit {
       const { user } = this.session
 
       const username = this.updateProfileForm.value.username as string
-      const website = this.updateProfileForm.value.website as string
-      const avatar_url = this.updateProfileForm.value.avatar_url as string
-      const picture = this.profile.picture
+      const picture = this.updateProfileForm.value.picture as string
 
       const { error } = await this.supabase.updateProfile({
         id: user.id,
         username,
         picture,
-        avatar_url,
       })
       if (error) throw error
     } catch (error) {

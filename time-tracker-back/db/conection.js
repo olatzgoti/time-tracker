@@ -17,6 +17,10 @@ pool.connect((err, client, release) => {
     }
     client.query('SELECT * FROM USERS', (error, res)=>{
         console.log(res.rows);
+
+    client.query("SELECT * FROM information_schema.tables WHERE table_schema = 'public'", (err, res)=>{
+        console.log(res.rows)
+    })
     })
     console.log('conected');
     release();
